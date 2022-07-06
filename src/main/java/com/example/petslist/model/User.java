@@ -1,5 +1,6 @@
 package com.example.petslist.model;
 
+import com.fasterxml.jackson.annotation.*;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;

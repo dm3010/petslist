@@ -32,9 +32,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .exceptionHandling()
 //                .authenticationEntryPoint(basicauthenticationEntryPoint)
 //                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//                .and()
-//                    .exceptionHandling()
-//                    .authenticationEntryPoint(authenticationEntryPoint)
+                .and()
+                    .exceptionHandling()
+                    .authenticationEntryPoint(authenticationEntryPoint)
                 .and().httpBasic()
                 .and().headers().frameOptions().disable()
                 .and().sessionManagement().disable()

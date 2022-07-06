@@ -1,6 +1,6 @@
 package com.example.petslist.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -15,9 +15,10 @@ public class Pet {
     private String name;
     private String birthday;
     private PetType type;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    @JsonIgnore
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "username", scope = User.class)
+    @JsonIdentityReference(alwaysAsId=true)
     private User user;
 
     public Pet() {
