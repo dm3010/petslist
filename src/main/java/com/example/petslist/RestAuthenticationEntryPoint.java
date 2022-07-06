@@ -1,5 +1,7 @@
 package com.example.petslist;
 
+import com.example.petslist.model.Attempts;
+import com.example.petslist.service.LoginAttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.AuthenticationException;
@@ -19,8 +21,12 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Qualifier("handlerExceptionResolver")
     private HandlerExceptionResolver resolver;
 
+    @Autowired
+    LoginAttemptService attemptService;
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+//        attemptService.loginFailed(authException.);
         resolver.resolveException(request, response, null, authException);
     }
 }

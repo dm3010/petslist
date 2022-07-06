@@ -28,24 +28,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "/h2/**", "/register", "/register/**").permitAll()
                 .anyRequest().authenticated()
-//                .and()
-//                .exceptionHandling()
-//                .authenticationEntryPoint(basicauthenticationEntryPoint)
 //                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 .and()
-                    .exceptionHandling()
-                    .authenticationEntryPoint(authenticationEntryPoint)
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint)
                 .and().httpBasic()
                 .and().headers().frameOptions().disable()
                 .and().sessionManagement().disable()
-        ;
-
-
-//                .and()
-//                    .exceptionHandling()
-//                    .authenticationEntryPoint(authenticationEntryPoint)
-//                .and()
-//                .authenticationEntryPoint(((request, response, e) -> resolver.resolveException(request, response, null, e)));
         ;
     }
 

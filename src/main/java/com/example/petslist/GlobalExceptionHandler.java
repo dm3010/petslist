@@ -17,25 +17,25 @@ public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler({AuthenticationException.class, MissingCsrfTokenException.class, InvalidCsrfTokenException.class, SessionAuthenticationException.class})
-    public ResponseEntity<?> handleAuthenticationException(RuntimeException ex) {
+    public ResponseEntity<Object> handleAuthenticationException(RuntimeException ex) {
         return new ApiError(HttpStatus.UNAUTHORIZED, ex.getLocalizedMessage()).responseEntity();
     }
 
     @ResponseBody
     @ExceptionHandler(PetNotFoundException.class)
-    public ResponseEntity<?> petNotFoundHandler(PetNotFoundException ex) {
+    public ResponseEntity<Object> petNotFoundHandler(PetNotFoundException ex) {
         return new ApiError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage()).responseEntity();
     }
 
     @ResponseBody
     @ExceptionHandler(UserAlreadyExistException.class)
-    public ResponseEntity<?> userAlreadyExistHandler(UserAlreadyExistException ex) {
+    public ResponseEntity<Object> userAlreadyExistHandler(UserAlreadyExistException ex) {
         return new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage()).responseEntity();
     }
 
     @ResponseBody
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> ExceptionHandler(Exception ex) {
+    public ResponseEntity<Object> ExceptionHandler(Exception ex) {
         return new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage()).responseEntity();
     }
 
@@ -50,7 +50,15 @@ public class GlobalExceptionHandler {
             this.message = message;
         }
 
-        public ResponseEntity<?> responseEntity() {
+        public HttpStatus getStatus() {
+            return status;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public ResponseEntity<Object> responseEntity() {
             return ResponseEntity.status(status).body(this);
         }
     }
