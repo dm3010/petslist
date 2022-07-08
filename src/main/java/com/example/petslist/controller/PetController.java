@@ -4,7 +4,7 @@ import com.example.petslist.error.PetNotFoundException;
 import com.example.petslist.model.Pet;
 import com.example.petslist.model.PetType;
 import com.example.petslist.repository.PetRepository;
-import com.example.petslist.repository.UserRepository;
+import com.example.petslist.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -28,7 +28,7 @@ public class PetController {
     @Autowired
     private ModelAssembler assembler;
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @GetMapping("/pets")
     CollectionModel<EntityModel<Pet>> all() {
@@ -60,7 +60,7 @@ public class PetController {
     ResponseEntity<?> newPet(@RequestBody Pet newPet) {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        newPet.setUser(userRepository.findUserByUsername(username));
+        newPet.setUser(userService.findByUsername(username));
 
         EntityModel<Pet> entityModel = assembler.toModel(petRepository.save(newPet));
 
@@ -73,7 +73,7 @@ public class PetController {
     ResponseEntity<?> replacePet(@RequestBody Pet newPet, @PathVariable Long id) {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        newPet.setUser(userRepository.findUserByUsername(username));
+        newPet.setUser(userService.findByUsername(username));
 
         Pet updatedPet = petRepository.findById(id)
                 .map(pet -> {

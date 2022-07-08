@@ -1,13 +1,12 @@
 package com.example.petslist.model;
 
-import com.fasterxml.jackson.annotation.*;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.util.*;
 
 @Entity
-@Table(name = "t_user")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -20,6 +19,7 @@ public class User {
     private String password;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Pet> pets;
+    private boolean accountLocked;
 
     public User() {
     }
@@ -27,6 +27,7 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        this.accountLocked = false;
         this.pets = new ArrayList<>();
     }
 
@@ -60,5 +61,13 @@ public class User {
 
     public void setPets(List<Pet> pets) {
         this.pets = pets;
+    }
+
+    public void setAccountLocked(boolean accountLocked) {
+        this.accountLocked = accountLocked;
+    }
+
+    public boolean isAccountLocked() {
+        return accountLocked;
     }
 }

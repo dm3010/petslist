@@ -1,4 +1,4 @@
-package com.example.petslist;
+package com.example.petslist.error;
 
 import com.example.petslist.error.PetNotFoundException;
 import com.example.petslist.error.UserAlreadyExistException;

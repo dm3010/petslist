@@ -1,16 +1,32 @@
 package com.example.petslist.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Attempts {
     @Id
-    @GeneratedValue
     private Long id;
+    @OneToOne(cascade = CascadeType.MERGE)
+    @MapsId
+    @JoinColumn(name = "id")
+    private User user;
     private Long time;
-    private Long count;
+    private Integer count = 0;
+
+    public Attempts() {
+    }
+
+    public Attempts(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Long getTime() {
         return time;
@@ -20,20 +36,12 @@ public class Attempts {
         this.time = time;
     }
 
-    public Long getCount() {
+    public int getCount() {
         return count;
     }
 
-    public void setCount(Long count) {
+    public void setCount(int count) {
         this.count = count;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Id
-    public Long getId() {
-        return id;
-    }
 }

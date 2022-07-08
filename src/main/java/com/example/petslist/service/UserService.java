@@ -12,7 +12,6 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -21,10 +20,28 @@ public class UserService {
             throw new UserAlreadyExistException(newUser.getUsername());
         }
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        return userRepository.save(newUser);
+        return save(newUser);
     }
 
     public boolean usernameExists(String username) {
         return userRepository.findUserByUsername(username) != null;
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findUserByUsername(username);
+    }
+
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    public void unlock(User user) {
+        user.setAccountLocked(false);
+        save(user);
+    }
+
+    public void lock(User user) {
+        user.setAccountLocked(true);
+        save(user);
     }
 }

@@ -1,16 +1,19 @@
 package com.example.petslist.model;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 public class Pet {
 
-    private @Id
+    @Id
     @GeneratedValue
-    Long id;
+    private Long id;
+    @NonNull
     @Column(unique = true)
     private String name;
     private String birthday;
@@ -18,7 +21,7 @@ public class Pet {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "username", scope = User.class)
-    @JsonIdentityReference(alwaysAsId=true)
+    @JsonIdentityReference(alwaysAsId = true)
     private User user;
 
     public Pet() {
