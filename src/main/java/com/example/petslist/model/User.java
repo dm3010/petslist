@@ -1,5 +1,8 @@
 package com.example.petslist.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
@@ -12,10 +15,10 @@ public class User {
     @Id
     @GeneratedValue
     private Long id;
-    @NonNull
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
-    @NonNull
+    @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Pet> pets;

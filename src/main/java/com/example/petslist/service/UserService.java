@@ -1,6 +1,7 @@
 package com.example.petslist.service;
 
-import com.example.petslist.error.UserAlreadyExistException;
+import com.example.petslist.error.APIError;
+import com.example.petslist.error.APIException;
 import com.example.petslist.model.User;
 import com.example.petslist.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,9 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User register(User newUser) throws UserAlreadyExistException {
+    public User register(User newUser) {
         if (usernameExists(newUser.getUsername())) {
-            throw new UserAlreadyExistException(newUser.getUsername());
+            throw new APIException(APIError.USER_ALREADY_EXIST.withParam(newUser.getUsername()));
         }
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         return save(newUser);

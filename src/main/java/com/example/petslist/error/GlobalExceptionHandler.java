@@ -1,65 +1,35 @@
 package com.example.petslist.error;
 
-import com.example.petslist.error.PetNotFoundException;
-import com.example.petslist.error.UserAlreadyExistException;
-import org.springframework.http.HttpStatus;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.security.web.csrf.InvalidCsrfTokenException;
 import org.springframework.security.web.csrf.MissingCsrfTokenException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ResponseBody
     @ExceptionHandler({AuthenticationException.class, MissingCsrfTokenException.class, InvalidCsrfTokenException.class, SessionAuthenticationException.class})
-    public ResponseEntity<Object> handleAuthenticationException(RuntimeException ex) {
-        return new ApiError(HttpStatus.UNAUTHORIZED, ex.getLocalizedMessage()).responseEntity();
+    public ResponseEntity<?> handleAuthenticationException(RuntimeException ex) {
+        return APIError.UNAUTHORIZED.withParam(ex.getLocalizedMessage()).toResponseEntity();
     }
 
-    @ResponseBody
-    @ExceptionHandler(PetNotFoundException.class)
-    public ResponseEntity<Object> petNotFoundHandler(PetNotFoundException ex) {
-        return new ApiError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage()).responseEntity();
+    @ExceptionHandler(DataAccessException.class)
+    public ResponseEntity<?> dataAccessExceptionHandler(DataAccessException ex) {
+        return APIError.DATABASE_ACCESS_ERROR.withParam(ex.getLocalizedMessage()).toResponseEntity();
     }
 
-    @ResponseBody
-    @ExceptionHandler(UserAlreadyExistException.class)
-    public ResponseEntity<Object> userAlreadyExistHandler(UserAlreadyExistException ex) {
-        return new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage()).responseEntity();
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<?> ExceptionHandler(RuntimeException ex) {
+        return APIError.ANOTHER_ERROR.withParam(ex.getLocalizedMessage()).toResponseEntity();
     }
 
-    @ResponseBody
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> ExceptionHandler(Exception ex) {
-        return new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage()).responseEntity();
+    @ExceptionHandler(APIException.class)
+    public ResponseEntity<?> apiExceptionHandler(APIException ex) {
+        return ex.getError().toResponseEntity();
     }
 
-    class ApiError {
-
-        private final HttpStatus status;
-        private final String message;
-
-        public ApiError(HttpStatus status, String message) {
-            super();
-            this.status = status;
-            this.message = message;
-        }
-
-        public HttpStatus getStatus() {
-            return status;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public ResponseEntity<Object> responseEntity() {
-            return ResponseEntity.status(status).body(this);
-        }
-    }
 }

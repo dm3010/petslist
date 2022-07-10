@@ -3,6 +3,7 @@ package com.example.petslist.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.sun.istack.NotNull;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
@@ -13,8 +14,7 @@ public class Pet {
     @Id
     @GeneratedValue
     private Long id;
-    @NonNull
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
     private String birthday;
     private PetType type;

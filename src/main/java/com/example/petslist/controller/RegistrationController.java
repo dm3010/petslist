@@ -25,7 +25,7 @@ public class RegistrationController {
     private UserService userService;
 
     @PostMapping("/register")
-    String registration(@RequestBody User newUser, HttpServletRequest request) {
+    User registration(@RequestBody User newUser, HttpServletRequest request) {
 
         String username = newUser.getUsername();
         String password = newUser.getPassword();
@@ -38,16 +38,15 @@ public class RegistrationController {
         Authentication authentication = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return user != null ? "success" : "false";
+        return user;
     }
 
     @GetMapping("/register/checkname/{username}")
     ResponseEntity<?> checkUsername(@PathVariable String username) {
-        return new ResponseEntity<>(
-                Map.of(
-                        "username", username,
-                        "available", Boolean.toString(!userService.usernameExists(username))
-                ),
-                HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+                "username", username,
+                "available", Boolean.toString(!userService.usernameExists(username))
+                )
+        );
     }
 }
